@@ -1,16 +1,18 @@
-import React, { useState } from "react";
-import { useData } from "../../contexts/DataContext";
+
+import { useState } from "react";
 import EventCard from "../../components/EventCard";
 import Select from "../../components/Select";
+import { useData } from "../../contexts/DataContext";
 import Modal from "../Modal";
 import ModalEvent from "../ModalEvent";
+
 import "./style.css";
 
 const PER_PAGE = 9;
 
-const Events = () => {
+const EventList = () => {
   const { data, error } = useData();
-  const [type, setType] = useState(null);
+  const [type, setType] = useState();
   const [currentPage, setCurrentPage] = useState(1);
 
   const filteredEvents =
@@ -24,22 +26,21 @@ const Events = () => {
   const changeType = (evtType) => {
     setCurrentPage(1);
     setType(evtType);
+    // eslint-disable-next-line no-console
   };
-
   const pageNumber = Math.ceil(filteredEvents.length / PER_PAGE);
   const typeList = new Set(data?.events.map((event) => event.type));
-
   return (
     <>
-      {error && <div>An error occurred</div>}
+      {error && <div>An error occured</div>}
       {data === null ? (
-        "Loading..."
+        "loading"
       ) : (
         <>
-          <h3 className="SelectTitle">Categories</h3>
+          <h3 className="SelectTitle">Catégories</h3>
           <Select
             selection={Array.from(typeList)}
-            onChange={(value) => changeType(value)}
+            onChange={(value) => (value ? changeType(value) : changeType(null))}
           />
           <div id="events" className="ListContainer">
             {eventsDisplayed.map((event) => (
@@ -58,11 +59,8 @@ const Events = () => {
           </div>
           <div className="Pagination">
             {[...Array(pageNumber || 0)].map((_, n) => (
-              <a
-                key={n}
-                href="#events"
-                onClick={() => setCurrentPage(n + 1)}
-              >
+              // eslint-disable-next-line react/no-array-index-key
+              <a key={n} href="#events" onClick={() => setCurrentPage(n + 1)}>
                 {n + 1}
               </a>
             ))}
@@ -73,4 +71,4 @@ const Events = () => {
   );
 };
 
-export default Events;
+export default EventList;

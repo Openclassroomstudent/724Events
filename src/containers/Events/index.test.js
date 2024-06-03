@@ -1,3 +1,4 @@
+
 import { fireEvent, render, screen } from "@testing-library/react";
 import { api, DataProvider } from "../../contexts/DataContext";
 import Events from "./index";
@@ -109,7 +110,3 @@ describe("When Events is created", () => {
     });
   });
 });
-
-
-
-
